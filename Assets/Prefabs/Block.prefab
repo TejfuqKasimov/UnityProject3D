@@ -13,11 +13,11 @@ GameObject:
   - component: {fileID: 3516884502413590513}
   - component: {fileID: 2953272422710780817}
   m_Layer: 0
-  m_Name: Wall Right
+  m_Name: Wall with Door Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &5332732736167868076
 Transform:
@@ -121,11 +121,11 @@ GameObject:
   - component: {fileID: 4935947279200791041}
   - component: {fileID: 3967509496425469003}
   m_Layer: 0
-  m_Name: Wall Left
+  m_Name: Wall with Door Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &7163232229519114447
 Transform:
@@ -230,7 +230,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1376730019951095799
 Transform:
@@ -267,7 +267,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2338421556020498296
 Transform:
@@ -373,7 +373,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &6225860315997888684
 Transform:
@@ -409,7 +409,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &4691854532586757583
 Transform:
@@ -509,12 +509,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5897369101711288010}
+  - component: {fileID: 309057348990339996}
   m_Layer: 0
   m_Name: Block
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &5897369101711288010
 Transform:
@@ -534,6 +535,24 @@ Transform:
   - {fileID: 2338421556020498296}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &309057348990339996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6517872906649334012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d20862008f7dd3448587f7a98a5f054, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Floor: {fileID: 4159166816394536495}
+  WallLeft: {fileID: 8248433928337295200}
+  WallRight: {fileID: 7940071910522665574}
+  WallWithDoorLeft: {fileID: 3054692170238562861}
+  WallWithDoorRight: {fileID: 407138920969814438}
+  WallWithDoorUp: {fileID: 6048856277816567940}
 --- !u!1 &7940071910522665574
 GameObject:
   m_ObjectHideFlags: 0
@@ -551,7 +570,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &618309945220082933
 Transform:
@@ -562,7 +581,7 @@ Transform:
   m_GameObject: {fileID: 7940071910522665574}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.2, z: 18.875}
+  m_LocalPosition: {x: 0, y: 2.2, z: -18.875}
   m_LocalScale: {x: 37.4, y: 4.4, z: 0.34}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -659,7 +678,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &5242631492909325348
 Transform:
@@ -670,7 +689,7 @@ Transform:
   m_GameObject: {fileID: 8248433928337295200}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.2, z: -18.875}
+  m_LocalPosition: {x: 0, y: 2.2, z: 18.875}
   m_LocalScale: {x: 37.4, y: 4.4, z: 0.34}
   m_ConstrainProportionsScale: 0
   m_Children: []

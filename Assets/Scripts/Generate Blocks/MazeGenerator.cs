@@ -14,10 +14,12 @@ public class MazeGeneratorCell
 
 public class MazeGenerator
 {
-    public int Width = 11;
-    public int Height = 11;
-    public MazeGeneratorCell[,] GenerateMaze()
+    int Width;
+    int Height;
+    public MazeGeneratorCell[,] GenerateMaze(int TmpWidth, int TmpHeight)
     {
+        Width = TmpWidth;
+        Height = TmpHeight;
         MazeGeneratorCell[,] maze = new MazeGeneratorCell[Width, Height];
 
         for (int x = 0; x < maze.GetLength(0); ++x)
@@ -29,11 +31,6 @@ public class MazeGenerator
         }
 
         RemoveWallsWithBacktracker(maze);
-
-        for (int y = 0; y < maze.GetLength(0); ++y)
-        {
-            maze[maze.GetLength(0) - 1, y].WallLeft = false;
-        }
 
         maze[maze.GetLength(0) - 1, (maze.GetLength(1) - 1) / 2 + (maze.GetLength(0) - 1) % 2].WallBottom = false;
 

@@ -7,16 +7,20 @@ public class MazeSpawner : MonoBehaviour
 {
     public GameObject cellPrefab;
     public GameObject blockPrefab;
-    public GameObject currentBlock;
-    public GameObject previousBlock;
-    public GameObject previousPrBlock = null;
+    private GameObject currentBlock;
+    private GameObject previousBlock;
+    private GameObject previousPrBlock;
     public GameObject startRoomPrefab;
-    public GameObject startRoom;
-    GameObject[,] currentGOMaze = new GameObject[11, 11];
-    GameObject[,] previousGOMaze = new GameObject[11, 11];
-    GameObject[,] previousPrGOMaze = new GameObject[11, 11];
-    private float Wight = 3.4f;
-    private float Height = 3.4f;
+    private GameObject startRoom;
+    private GameObject[,] currentGOMaze = new GameObject[11, 11];
+    private GameObject[,] previousGOMaze = new GameObject[11, 11];
+    private GameObject[,] previousPrGOMaze = new GameObject[11, 11];
+    private float Rast = 5.5f;
+    private float PlayerRast = 5.5f;
+    private const float Wight = 3.4f;
+    private const float Height = 3.4f;
+    private int CountWight = 5;
+    private int CountHeight = 5;
     public Transform obj;
     private int LevelCount = 0;
 
@@ -24,22 +28,26 @@ public class MazeSpawner : MonoBehaviour
     void Start()
     {
         startRoom = Instantiate(startRoomPrefab, Vector3.zero, quaternion.identity);
-        currentBlock = Instantiate(blockPrefab, new Vector3(24.2f + 37.4f * LevelCount, 0, 0), quaternion.identity);
+        currentBlock = createBlock();
         currentGOMaze = Generate();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (obj.position.x >= LevelCount * Height * 11 + 5.5f)
+        if (obj.position.x >= PlayerRast)
         {
-            previousPrBlock = previousBlock;
-            previousBlock = currentBlock;
+            PlayerRast = Rast;
             LevelCount++;
-            currentBlock = Instantiate(blockPrefab, new Vector3(24.2f + 37.4f * LevelCount, 0, 0), quaternion.identity);
             previousPrGOMaze = previousGOMaze;
             previousGOMaze = currentGOMaze;
             currentGOMaze = Generate();
+            previousPrBlock = previousBlock;
+            previousBlock = currentBlock;
+            currentBlock = createBlock();
+            int tmp = LevelCount / 4;
+            CountWight = 5 + 2 * tmp;
+            CountHeight = 5 + 2 * tmp;
 
             if (previousPrBlock != null)
             {
@@ -62,22 +70,48 @@ public class MazeSpawner : MonoBehaviour
             }
         }
     }
-
-    private GameObject[,] Generate()
+    public GameObject[,] Generate()
     {
         MazeGenerator generator = new MazeGenerator();
-        MazeGeneratorCell[,] maze = generator.GenerateMaze();
+        MazeGeneratorCell[,] maze = generator.GenerateMaze(CountWight, CountHeight);
         GameObject[,] GOMaze = new GameObject[maze.GetLength(0), maze.GetLength(1)];
         for (int x = 0; x < maze.GetLength(0); ++x)
         {
             for (int z = 0; z < maze.GetLength(1); ++z)
             {
-                GOMaze[x, z] = Instantiate(cellPrefab, new Vector3(7.2f + LevelCount * Height * 11 + x * Wight, 0, -17f + z * Height), quaternion.identity);
+                GOMaze[x, z] = Instantiate(cellPrefab, new Vector3(PlayerRast + 1.7f + x * Wight, 0, -(Height * CountHeight / 2 - 1.7f) + z * Height), quaternion.identity);
                 Cell c = GOMaze[x, z].GetComponent<Cell>();
                 c.WallLeft.SetActive(maze[x, z].WallLeft);
                 c.WallBottom.SetActive(maze[x, z].WallBottom);
             }
         }
         return GOMaze;
+    }
+    private GameObject createBlock() 
+    {
+        Rast += 1f * Height * CountHeight / 2;
+        GameObject curObj = Instantiate(blockPrefab, new Vector3(Rast, 0, 0), quaternion.identity);
+        Block curBlock = curObj.GetComponent<Block>();
+
+        curBlock.Floor.transform.localScale = new Vector3(Height * CountHeight / 10, 1, Height * CountHeight / 10);
+
+        curBlock.WallLeft.transform.localScale = new Vector3(Height * CountHeight, 4.4f, 0.35f);
+        curBlock.WallLeft.transform.position = new Vector3(Rast, 2.2f, Height * CountHeight / 2  + 0.175f);
+
+        curBlock.WallRight.transform.localScale = new Vector3(Height * CountHeight, 4.4f, 0.35f);
+        curBlock.WallRight.transform.position = new Vector3(Rast, 2.2f, (-1) * Height * CountHeight / 2  - 0.175f);
+
+
+        curBlock.WallWithDoorLeft.transform.localScale = new Vector3(0.35f, 4.4f, Height * CountHeight / 2 - 1.6f);
+        curBlock.WallWithDoorLeft.transform.position = new Vector3(Rast - 1f * Height * CountHeight / 2 - 0.175f, 2.2f, (Height * CountHeight / 2 - 1.6f) / 2 + 1.6f);
+        
+        curBlock.WallWithDoorRight.transform.localScale = new Vector3(0.35f, 4.4f, Height * CountHeight / 2 - 1.7f);
+        curBlock.WallWithDoorRight.transform.position = new Vector3(Rast - 1f * Height * CountHeight / 2 - 0.175f, 2.2f, -(Height * CountHeight / 2 - 1.7f) / 2 - 1.7f);
+        
+        curBlock.WallWithDoorUp.transform.position = new Vector3(Rast - 1f * Height * CountHeight / 2 - 0.175f, 3.9f, -0.05f);
+        
+        Rast += 1f * Height * CountHeight / 2;
+
+        return curObj;
     }
 }
