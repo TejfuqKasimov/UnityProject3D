@@ -27,6 +27,8 @@ public class MazeSpawner : MonoBehaviour
     private GameObject[,] previousPrGOMaze = new GameObject[5, 5];
     public Transform Character;
     private int LevelCount = 0;
+    private bool LevelEnded = false;
+    private int LevelEndedSecond = 0;
     private MazeGeneratorCell[,] previousMaze = new MazeGeneratorCell[5, 5];
     private MazeGeneratorCell[,] currentMaze = new MazeGeneratorCell[5, 5];
     [SerializeField] private bool isEnd = false;
@@ -62,39 +64,53 @@ public class MazeSpawner : MonoBehaviour
             previousPrBlock = previousBlock;
             previousBlock = currentBlock;
             currentBlock = createBlock();
+            previousBlock.GetComponent<Block>().Door.GetComponent<Animator>().SetBool("Close", true);
             int tmp = LevelCount / 4;
             CountWight = 5 + 2 * tmp;
             CountHeight = 5 + 2 * tmp;
-            // Destroy Previous Block
-            if (previousPrBlock != null)
-            {
-                Destroy(previousPrBlock);
-            }
-            // Destroy Start Room if it doesn't Destroyedin previous frame
-            if (startRoom != null)
-            {
-                Destroy(startRoom);
-            }
-            // Destroy Previous Path and Maze
-            for (int x = 0; x < previousPrGOMaze.GetLength(0); ++x)
-            {
-                for (int z = 0; z < previousPrGOMaze.GetLength(1); ++z)
-                {
-                    if (previousPrGOMaze[x, z] != null)
-                    {
-                        Destroy(previousPrGOMaze[x, z]);
-                    }
-                    if (previousPrPath[x, z] != null)
-                    {
-                        Destroy(previousPrPath[x, z]);
-                    }
-                }
-            }
+            LevelEnded = true;
+            LevelEndedSecond = 0;
         }
         // if level is end show way to next level
         if (isEnd)
         {
             ShowWay();
+        }
+    }
+    void FixedUpdate()
+    {
+        if (LevelEnded)
+        {
+            ++LevelEndedSecond;
+            if (LevelEndedSecond > 100)
+            {
+                LevelEnded = false;  // Reset LevelEnded
+                // Destroy Previous Block
+                if (previousPrBlock != null)
+                {
+                    Destroy(previousPrBlock);
+                }
+                // Destroy Start Room if it doesn't Destroyedin previous frame
+                if (startRoom != null)
+                {
+                    Destroy(startRoom);
+                }
+                // Destroy Previous Path and Maze
+                for (int x = 0; x < previousPrGOMaze.GetLength(0); ++x)
+                {
+                    for (int z = 0; z < previousPrGOMaze.GetLength(1); ++z)
+                    {
+                        if (previousPrGOMaze[x, z] != null)
+                        {
+                            Destroy(previousPrGOMaze[x, z]);
+                        }
+                        if (previousPrPath[x, z] != null)
+                        {
+                            Destroy(previousPrPath[x, z]);
+                        }
+                    }
+                }
+            }
         }
     }
     // Generate Maze
@@ -113,20 +129,12 @@ public class MazeSpawner : MonoBehaviour
                 Cell c = GOMaze[x, z].GetComponent<Cell>();
                 c.WallLeft.SetActive(maze[x, z].WallLeft);
                 c.WallBottom.SetActive(maze[x, z].WallBottom);
-                // if (maze[x, z].WallLeft) currentPath[x, z].GetComponent<Way>().Left.SetActive(false);
-                // else                     currentPath[x, z].GetComponent<Way>().Left.SetActive(true);
-
-                // if (maze[x, z].WallBottom) currentPath[x, z].GetComponent<Way>().Up.SetActive(false);
-                // else                       currentPath[x, z].GetComponent<Way>().Up.SetActive(true);
-
-                // if (x > 0)
-                //     if (maze[x - 1, z].WallBottom) currentPath[x, z].GetComponent<Way>().Bottom.SetActive(false);
-                //     else                         currentPath[x, z].GetComponent<Way>().Bottom.SetActive(true);
-                
-                // if (z > 0)
-                //     if (maze[x, z - 1].WallLeft) currentPath[x, z].GetComponent<Way>().Right.SetActive(false);
-                //     else                           currentPath[x, z].GetComponent<Way>().Right.SetActive(true);
             }
+        }
+        for (int z = 0; z < maze.GetLength(0); ++z)
+        {
+            Cell c = GOMaze[CountWight - 1, z].GetComponent<Cell>();
+            c.WallBottom.SetActive(false);
         }
         return GOMaze;
     }
@@ -172,7 +180,7 @@ public class MazeSpawner : MonoBehaviour
         curBlock.WallWithDoorRight.transform.position = new Vector3(Rast - 1f * Height * CountHeight / 2 - 0.175f, 2.2f, -(Height * CountHeight / 2 - 1.7f) / 2 - 1.7f);
         
         curBlock.WallWithDoorUp.transform.position = new Vector3(Rast - 1f * Height * CountHeight / 2 - 0.175f, 3.9f, -0.05f);
-        
+        curBlock.Door.transform.position = new Vector3(Rast - 1f * Height * CountHeight / 2 - 0.1f, 0f, -0.05f);
         Rast += 1f * Height * CountHeight / 2;
 
         return curObj;

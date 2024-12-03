@@ -8,4 +8,5 @@ public class Block : MonoBehaviour
     public GameObject WallWithDoorLeft;
     public GameObject WallWithDoorRight;
     public GameObject WallWithDoorUp;
+    public GameObject Door;
 }
